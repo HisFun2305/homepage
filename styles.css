@@ -1,0 +1,128 @@
+body {
+    font-family: Montserrat, Arial
+}
+
+nav .link-light:hover {
+    color: #0d6efd;
+}
+
+nav a {
+    border-radius: 7px;
+    font-size: 16px;
+    color: white;
+}
+
+nav a:hover {
+    background-color: beige;
+}
+
+nav.navbar{
+    font-family: MonomaniacOne, Impact;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+    letter-spacing: 1px;
+}
+
+textarea {
+    position: relative;
+    margin-block-start: 1rem;
+}
+
+.active {
+    text-decoration-line: underline;
+}
+
+.container {
+    padding-bottom: 2rem;
+}
+
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+}
+
+.navbar.responsive-buffer {
+    opacity: 0;
+    position: inherit;
+    z-index: -1;
+}
+
+div>.navber-toggler.responsive-buffer {
+    opacity: 0;
+    z-index: -1;
+}
+
+div>.nav-link.responsive-buffer {
+    opacity: 0;
+    z-index: -1;
+}
+
+@media (max-width: 576px) {
+    #vert {
+        opacity: 0;
+        height: 0;
+    }
+
+    .navbar>.container-fluid {
+        justify-content: flex-end;
+    }
+
+    .navbar-text {
+        font-size: 16px;
+    }
+
+    @media (max-width:200px) {
+        .navbar-text {
+            font-size: 8vw;
+        }
+
+        .navbar-toggler {
+            font-size: 10vw;
+            padding-top: 2vw;
+            padding-bottom: 2vw;
+            padding-right: 0;
+            padding-left: 3vw;
+        }
+    }
+
+    .navbar-collapse {
+        margin-top: 6px;
+        text-align: center;
+    }
+}
+
+@media (min-width: 576px) {
+    .navbar-text {
+        display: none;
+        opacity: 0;
+        height: 0;
+        width: 0;
+    }
+
+    .vert {
+        background-color: white;
+        position: relative;
+        width: 2px;
+        height: 1rem;
+        top: 12px;
+        display: block;
+    }
+}
+
+@font-face {
+    font-family: MonomaniacOne;
+    src: url(assets/fonts/MonomaniacOne-Regular.ttf);
+}
+
+@font-face {
+    font-family: Montserrat;
+    src: url(assets/fonts/Montserrat-VariableFont_wght.ttf)
+}
+
+@font-face {
+    font-family: SpaceMono;
+    src: url(assets/fonts/SpaceMono-Regular.ttf)
+}

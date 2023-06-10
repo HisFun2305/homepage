@@ -1,0 +1,156 @@
+h2 {
+    text-align: center;
+    font-weight: bold;
+}
+
+.flex-container {
+    display: flex;
+}
+
+.flex-child {
+    display: inline-flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    position: relative;
+    flex: 1;
+    border: 0px;
+}
+
+.time-flex{
+    text-align: center;
+    font-family: SpaceMono, Courier
+}
+
+.symbol-span{
+    position: inline;
+    padding: 0;
+    color:white;
+}
+
+.flex-child.outer {
+    display: flex;
+    flex-direction: column;
+}
+
+.weather {
+    position: relative;
+    margin: auto;
+    display: flex;
+    container-type: inline-size;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.weather-content {
+    text-size-adjust: auto;
+    position: relative;
+    color: white;
+    text-align: center;
+    line-height: 1;
+    font-weight: bold;
+}
+
+@media (max-width: 158.4px) {
+    .time-flex{
+        font-size: 7.2px;
+    }
+
+    .flex-child.outer {
+        margin-block-start: 7.92px;
+    }
+
+    .symbol-span{
+        width:15px;
+        height:15px;
+    }
+
+    .weather {
+        width: 45px;
+        height: 45px;
+        margin-top: 7.92px;
+        border-radius: 7.92px;
+    }
+
+    .weather-content {
+        font-size: 18px
+    }
+
+    .weather-content.txt {
+        font-size: 9px
+    }
+
+    h2 {
+        font-size: 10px
+    }
+}
+
+@media (min-width: 158.4px) and (max-width: 528px) {
+    .time-flex{
+        font-size: 4.545vw;
+    }
+
+    .flex-child.outer {
+        margin-block-start: calc(2.14285714vw + 4.52571429px);
+    }
+
+    .symbol-span{
+        width: 9.47vw;
+        height: 9.47vw;
+    }
+
+    .weather {
+        width: 28.4vw;
+        height: 28.4vw;
+        margin-top: 5vw;
+        border-radius: 5vw;
+    }
+
+    .weather-content {
+        font-size: 40cqw;
+    }
+
+    .weather-content.txt {
+        font-size: 20cqw;
+    }
+
+    h2 {
+        font-size: 6.3125vw;
+    }
+}
+
+@media (min-width: 528px) {
+    .time-flex{
+        font-size: 24px;
+    }
+
+    .flex-child.outer {
+        margin-block-start: 15.84px;
+    }
+
+    .symbol-span{
+        width:50px;
+        height:50px;
+    }
+
+    .weather {
+        width: 150px;
+        height: 150px;
+        margin-top: 26.4px;
+        margin-left: 1rem;
+        margin-right: 1rem;
+        border-radius: 26.4px;
+    }
+
+    .weather-content {
+        font-size: 60px
+    }
+
+    .weather-content.txt {
+        font-size: 30px
+    }
+
+    h2 {
+        font-size: 33.3px;
+    }
+}

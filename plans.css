@@ -1,0 +1,106 @@
+.form-label{
+    font-weight: 600
+}
+
+.out {
+    margin-top: 0px;
+    padding-top: 0px;
+}
+
+.scatter {
+    position: relative
+}
+
+.scatter .dot {
+    border-radius: 100%;
+    border: 3px solid rgba(0, 49, 83, 1);
+    position: absolute;
+    width: 2%;
+    padding: 2%;
+    box-sizing: border-box;
+    background: lightblue;
+    transform: translate(50%, 50%);
+    box-sizing: border-box;
+}
+
+.scatter .tooltip {
+    position: absolute;
+    background: white;
+    padding: 13px;
+    box-shadow: 0 8px 16px -8px rgba(0, 0, 0, .2);
+    font-size: 15px;
+    width: 150px;
+    display: none;
+    top: 50%;
+    left: 50%;
+    z-index: 9999;
+}
+
+.scatter .dot:hover .tooltip {
+    display: block;
+    opacity: 1;
+}
+
+.tooltip.visible-tooltip {
+    display: block;
+    opacity: 1;
+}
+
+.invisible-tooltip {
+    opacity: 0;
+    display: none;
+}
+
+
+.tooltip-exit {
+    right: 9px;
+    top: 9px;
+    display: block;
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    box-sizing: border-box;
+}
+
+.tooltip-exit:hover {
+    background: grey;
+}
+
+.img-exit {
+    vertical-align: top;
+}
+
+#img-bg {
+    width: 100%;
+    z-index: -1;
+}
+
+.stat {
+    margin: 3px;
+    padding: 0px;
+}
+
+.stat:has(~ .item-delete:hover),
+h5:has(~ .item-delete:hover) {
+    text-decoration-line: line-through;
+}
+
+.item-delete:hover {
+    background: gray;
+}
+
+.item-delete {
+    border-radius: 5px;
+    width: fit-content;
+    padding: 3px;
+    font-size: 13px;
+    cursor: default;
+}
+
+.btn {
+    border-radius: 5px;
+    width: fit-content;
+    padding: 3px;
+    font-size: 13px;
+    cursor: default;
+}
