@@ -13,3 +13,15 @@ app = Flask(__name__)
 @app.route("/")
 def index():
     return render_template("index.html")
+
+@app.route("/to-do")
+def todo():
+    return render_template("to-do.html")
+
+@app.route("/plans")
+def plans():
+    return render_template("plans.html")
+
+@app.route("/tnw")
+def tnw():
+    return render_template("tnw.html")
