@@ -25,6 +25,7 @@ function makeToolTip(d, i) {
     var number1 = document.createElement("input");
     var label2 = document.createElement("label2");
     var number2 = document.createElement("input");
+    var exit = document.createElement("div");
     var edit = document.createElement("button");
     var img = document.createElement("img");
     var del = document.createElement("div");
@@ -37,6 +38,10 @@ function makeToolTip(d, i) {
     });
     logShow.id = "logToggle"
     logShow.className = "btn btn-outline-primary"
+    var cancel = document.createElement("button");
+    cancel.className = "btn btn-outline-danger"
+    cancel.innerText = "Cancel"
+    cancel.style = "display: none; opacity: 0;"
     del.innerText = "Clear item"
     del.className = "item-delete"
     del.addEventListener("click", function(event) {
@@ -44,6 +49,18 @@ function makeToolTip(d, i) {
         itemList.splice(i, 1);
         updatePlot();
     })
+    exit.className = "tooltip-exit";
+    img.src = "static/assets/exit.png";
+    img.className = "img-fluid img-exit";
+    exit.addEventListener("click", function(event) {
+        event.stopPropagation();
+        tooltip = exit.parentElement;
+        tooltip.className = 'invisible-tooltip';
+        setTimeout(function() {
+            tooltip.className = 'tooltip';
+        }, 30);
+    });
+    exit.appendChild(img);
     h5.innerText = d.txt;
     p1.appendChild(document.createTextNode(`Urgency: ${d.urg}`));
     p1.className = "stat";
@@ -61,9 +78,9 @@ function makeToolTip(d, i) {
     number1.setAttribute("max", 100);
     number1.addEventListener("input", function(event) {
         var dot = tTip.parentNode
-        y = number1.value
+        y = number1.valueAsNumber
         if (y <= 100 && y >= 0) {
-            dot.style.bottom = (y * .923) + "%"
+            d.urg = y;
         }
     });
     number1.style = "display: none; opacity: 0;"
@@ -78,9 +95,9 @@ function makeToolTip(d, i) {
     number2.setAttribute("max", 100);
     number2.addEventListener("input", function(event) {
         var dot = tTip.parentNode
-        y = number2.value
+        y = number2.valueAsNumber
         if (y <= 100 && y >= 0) {
-            dot.style.right = (y * .923) + "%"
+            d.impt = y;
         }
     });
     number2.style = "display: none; opacity: 0;"
@@ -110,28 +127,37 @@ function makeToolTip(d, i) {
     edit.innerText = "Edit"
     edit.addEventListener("click", function(event) {
         event.stopPropagation();
-        editSwitch(p1, p2, label1, label2, number1, number2, logInput, logSubmit);
+        editSwitch(edit, cancel, p1, p2, label1, label2, number1, number2, logInput, logSubmit, d);
     });
-    tTip.append(h5, p1, p2, label1, number1, label2, number2, del, logShow, edit, logInput, logSubmit);
-    tTip.className = "tooltip-alt";
-    tTip.addEventListener("click", function(event){
-        event.stopPropagation();
-        focusSwitch(tTip, d);
-    });
+    tTip.append(h5, exit, p1, p2, label1, number1, label2, number2, del, logShow, edit, cancel, logInput, logSubmit);
     return tTip;
 }
 
 var editSwitch = (function() {
     var first = true;
-    return function(p1, p2, label1, label2, number1, number2, logInput, logSubmit) {
-        first ? showEdit(p1, p2, label1, label2, number1, number2, logInput, logSubmit) : hideEdit(p1, p2, label1, label2, number1, number2, logInput, logSubmit);
+    return function(edit, cancel, p1, p2, label1, label2, number1, number2, logInput, logSubmit, d) {
+        first ? showEdit(edit, cancel, p1, p2, label1, label2, number1, number2, logInput, logSubmit, d) : hideEdit(edit, cancel, p1, p2, label1, label2, number1, number2, logInput, logSubmit, d);
         first = !first;
     }
 })();
 
-function showEdit(p1, p2, label1, label2, number1, number2, logInput, logSubmit) {
+function showEdit(edit, cancel, p1, p2, label1, label2, number1, number2, logInput, logSubmit, d) {
+    edit.innerHTML = "Save"
+    const x = d.impt;
+    const y = d.urg;
+    function cancelChanges(event){
+        event.stopPropagation();
+        d.impt = x;
+        number2.value = x;
+        d.urg = y;
+        number1.value = y;
+        cancel.removeEventListener("click", cancelChanges);
+        editSwitch(edit, cancel, p1, p2, label1, label2, number1, number2, logInput, logSubmit, d);
+    }
+    cancel.addEventListener("click", cancelChanges);
     p1.style = "display: none; opacity: 0;"
     p2.style = "display: none; opacity: 0;"
+    cancel.style = "display: inherit; opacity: 1;"
     number1.style = "display: inherit; opacity: 1;"
     number2.style = "display: inherit; opacity: 1;"
     label1.style = "display: inherit; opacity: 1;"
@@ -140,9 +166,13 @@ function showEdit(p1, p2, label1, label2, number1, number2, logInput, logSubmit)
     logSubmit.style = "display: inherit; opacity: 1;"
 }
 
-function hideEdit(p1, p2, label1, label2, number1, number2, logInput, logSubmit) {
+function hideEdit(edit, cancel, p1, p2, label1, label2, number1, number2, logInput, logSubmit, d) {
+    edit.innerHTML = "Edit"
     p1.style = "display: inherit; opacity: 1;"
+    p1.innerText = `Urgency: ${d.urg}`
     p2.style = "display: inherit; opacity: 1;"
+    p2.innerText = `Importance: ${d.impt}`
+    cancel.style = "display: none; opacity: 0;"
     number1.style = "display: none; opacity: 0;"
     number2.style = "display: none; opacity: 0;"
     label1.style = "display: none; opacity: 0;"

@@ -98,8 +98,8 @@ function makeToolTip(d, i) {
     number1.addEventListener("input", function(event) {
         var dot = tTip.parentNode
         y = number1.valueAsNumber
-        d.urg = y;
         if (y <= 100 && y >= 0) {
+            d.urg = y;
             dot.style.bottom = (y * .923) + "%"
         }
     });
@@ -116,8 +116,8 @@ function makeToolTip(d, i) {
     number2.addEventListener("input", function(event) {
         var dot = tTip.parentNode
         y = number2.valueAsNumber
-        d.impt = y;
         if (y <= 100 && y >= 0) {
+            d.impt = y;
             dot.style.right = (y * .923) + "%"
         }
     });
