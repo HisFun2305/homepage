@@ -236,4 +236,5 @@ document.addEventListener("DOMContentLoaded", function(event) {
     updatePrecip("precip", "precip-out", "precip-out-txt", 60);
     updateTemp("temp", "temp-out", "temp-out-txt", 25);
     makePlanGrid();
+    logJSONData();
 });

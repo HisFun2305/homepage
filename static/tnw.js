@@ -164,7 +164,7 @@ function updateClim(imgLoc, txtLoc, clim){
     outTxt.innerText = clim;
     outTxt.style.color = "black";
     clim = clim.replace(/\s+/g, '-').toLowerCase();
-    outImg.src = `assets/weather-icons/${clim}.svg`;
+    outImg.src = `static/assets/weather-icons/${clim}.svg`;
 }
 
 function updateTime(txtLoc, zone){

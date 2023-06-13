@@ -12,6 +12,33 @@ const itemList = [{
 }];
 const reEmpty = /\S/
 
+async function logJSONData() {
+    const response = await fetch("/plans/data");
+    const jsonData = await response.json();
+    for (var i of jsonData) itemList.push(i);
+    makeScatter();
+}
+
+async function postJSON(data) {
+    try {
+      const response = await fetch("/plans", {
+        method: "POST", // or 'PUT'
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+  
+      const result = await response.text();
+      console.log("Success:", result);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }
+  
+const data = { yeet: "bananene" };
+postJSON(data);
+
 function initSlider(loc, out) {
     let range = document.getElementById(loc)
     range.addEventListener("input", function(event) {
@@ -300,5 +327,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
     });
     initSlider("range1", "out1");
     initSlider("range2", "out2");
+    logJSONData();
     makeScatter();
 });

@@ -16,6 +16,12 @@ const itemList = [{
 }];
 const focusList = [];
 
+async function logJSONData() {
+    const response = await fetch("/plans/data");
+    const jsonData = await response.json();
+    console.log(jsonData);//to be updated
+}
+
 function makeToolTip(d, i) {
     var tTip = document.createElement("div");
     var h5 = document.createElement("h5");
