@@ -1,25 +1,10 @@
-const itemList = [{
-    urg: 40,
-    impt: 60,
-    txt: "test",
-    log: ["a", "b"]
-},{
-    urg: 70,
-    impt: 20,
-    txt: "test",
-    log: ["a", "b"]
-},{
-    urg: 30,
-    impt: 50,
-    txt: "test",
-    log: ["a", "b"]
-}];
-const focusList = [];
+const itemList = [];
 
 async function logJSONData() {
     const response = await fetch("/plans/data");
     const jsonData = await response.json();
-    console.log(jsonData);//to be updated
+    for (var i of jsonData) itemList.push(i);
+    makePlanGrid();
 }
 
 function makeToolTip(d, i) {
@@ -31,7 +16,6 @@ function makeToolTip(d, i) {
     var number1 = document.createElement("input");
     var label2 = document.createElement("label2");
     var number2 = document.createElement("input");
-    var exit = document.createElement("div");
     var edit = document.createElement("button");
     var img = document.createElement("img");
     var del = document.createElement("div");
@@ -55,18 +39,6 @@ function makeToolTip(d, i) {
         itemList.splice(i, 1);
         updatePlot();
     })
-    exit.className = "tooltip-exit";
-    img.src = "static/assets/exit.png";
-    img.className = "img-fluid img-exit";
-    exit.addEventListener("click", function(event) {
-        event.stopPropagation();
-        tooltip = exit.parentElement;
-        tooltip.className = 'invisible-tooltip';
-        setTimeout(function() {
-            tooltip.className = 'tooltip';
-        }, 30);
-    });
-    exit.appendChild(img);
     h5.innerText = d.txt;
     p1.appendChild(document.createTextNode(`Urgency: ${d.urg}`));
     p1.className = "stat";
@@ -135,7 +107,7 @@ function makeToolTip(d, i) {
         event.stopPropagation();
         editSwitch(edit, cancel, p1, p2, label1, label2, number1, number2, logInput, logSubmit, d);
     });
-    tTip.append(h5, exit, p1, p2, label1, number1, label2, number2, del, logShow, edit, cancel, logInput, logSubmit);
+    tTip.append(h5, p1, p2, label1, number1, label2, number2, del, logShow, edit, cancel, logInput, logSubmit);
     return tTip;
 }
 

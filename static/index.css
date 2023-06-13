@@ -6,14 +6,14 @@
     align-items: flex-start;
 }
 
-.flex-child {
-    display: inline-flex;
-    justify-content: center;
-    flex-wrap: wrap;
+.flex-child {    
+    display: flex;
     position: relative;
     flex: 1;
     border: 0px;
     padding-bottom: 2rem;
+    flex-direction: column;
+    align-items: center;
 }
 
 .flex-header {

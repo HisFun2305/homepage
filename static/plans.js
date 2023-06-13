@@ -4,12 +4,7 @@ function Item(newUrg, newImpt, newTxt, newLog) {
     this.txt = newTxt;
     this.log = [];
 };
-const itemList = [{
-    urg: 40,
-    impt: 60,
-    txt: "test",
-    log: ["a", "b"]
-}];
+var itemList = [];
 const reEmpty = /\S/
 
 async function logJSONData() {
@@ -19,7 +14,8 @@ async function logJSONData() {
     makeScatter();
 }
 
-async function postJSON(data) {
+async function postJSON(data, flag) {
+    data = [data, flag]
     try {
       const response = await fetch("/plans", {
         method: "POST", // or 'PUT'
@@ -29,15 +25,15 @@ async function postJSON(data) {
         body: JSON.stringify(data),
       });
   
-      const result = await response.text();
-      console.log("Success:", result);
     } catch (error) {
-      console.error("Error:", error);
+      console.error(error);
+    }
+    if (flag == 0 || flag == 2){
+        updatePlot()
     }
   }
   
 const data = { yeet: "bananene" };
-postJSON(data);
 
 function initSlider(loc, out) {
     let range = document.getElementById(loc)
@@ -55,8 +51,8 @@ function addItem(event) {
     if (reEmpty.test(newTxt.value)) {
         let newItem = new Item(newUrg.value, newImpt.value, newTxt.value, "");
         itemList.unshift(newItem);
+        postJSON(newItem, 0)
         newTxt.value = "";
-        updatePlot();
     } else {
         warning();
     }
@@ -93,7 +89,7 @@ function makeToolTip(d, i) {
     del.addEventListener("click", function(event) {
         event.stopPropagation();
         itemList.splice(i, 1);
-        updatePlot();
+        postJSON(d, 2)
     })
     exit.className = "tooltip-exit";
     img.src = "static/assets/exit.png";
@@ -232,6 +228,7 @@ function hideEdit(edit, cancel, p1, p2, label1, label2, number1, number2, logInp
     label2.style = "display: none; opacity: 0;"
     logInput.style = "display: none; opacity: 0;"
     logSubmit.style = "display: none; opacity: 0;"
+    postJSON(d, 1);
 }
 
 var logSwitch = (function() {
@@ -277,6 +274,7 @@ function addLog(d, tooltip) {
     hideLog(tooltip.querySelector("#logToggle"), tooltip);
     showLog(tooltip.querySelector("#logToggle"), tooltip, d);
     logSwitch(false);
+    postJSON(d, 1);
 }
 
 function makeScatter() {
@@ -298,8 +296,9 @@ function makeScatter() {
 
 function updatePlot() {
     plot = document.getElementById("plot");
+    itemList = [];
     clearPoints(plot);
-    makeScatter();
+    logJSONData();
 }
 
 function clearPoints(parent) {
@@ -328,5 +327,4 @@ document.addEventListener("DOMContentLoaded", function(event) {
     initSlider("range1", "out1");
     initSlider("range2", "out2");
     logJSONData();
-    makeScatter();
 });

@@ -40,8 +40,24 @@ def todo():
 @app.route("/plans", methods = ["GET", "POST"])
 def plans():
     if request.method == "POST":
-        print(request.json)
-        return "success"
+        data = request.json
+        conn = create_connection(DB_PATH)
+        db = conn.cursor()
+        if data[1] == 0:
+            data[0]["log"] = "|".join(data[0]["log"])
+            data = [data[0]["txt"], data[0]["urg"], data[0]["impt"], data[0]["log"]]
+            db.execute("INSERT INTO plans (txt, urg, impt, log) VALUES(?, ?, ?, ?)", data)
+            conn.commit()
+        elif data[1] == 1:
+            data[0]["log"] = "|".join(data[0]["log"])
+            data = [data[0]["txt"], data[0]["urg"], data[0]["impt"], data[0]["log"], data[0]["id"]]
+            db.execute("UPDATE plans SET txt = ?, urg = ?, impt = ?, log = ? WHERE id = ? ", data)
+            conn.commit()
+        elif data[1] == 2:
+            data = [data[0]["id"]]
+            db.execute("DELETE FROM plans WHERE id = ?", data)
+            conn.commit()
+        return
     else:
         return render_template("plans.html", active3 = "active", test_res = "yeet")
 
@@ -72,3 +88,5 @@ def dict_factory(cursor, row):
 #     ("test4", 23, 45, "y|c")
 # ] 
 # db.executemany("INSERT INTO plans (txt, urg, impt, log) VALUES(?, ?, ?, ?)", data)
+
+# CREATE TABLE plans (id INTEGER PRIMARY KEY AUTOINCREMENT, txt TEXT NOT NULL, urg INT NOT NULL, impt INT NOT NULL, log TEXT NOT NULL)
