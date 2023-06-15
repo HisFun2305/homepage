@@ -1,9 +1,23 @@
 .flex-container {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    align-content: center;
     flex-wrap: wrap;
+}
+
+.flex-middle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.flex-body{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
     justify-content: center;
-    align-items: flex-start;
 }
 
 .flex-child {    
@@ -95,9 +109,11 @@
 }
 
 h3 {
+    display: flex;
     font-size: 4vw;
     margin-top: 0.5rem;
     margin-bottom: 0;
+    text-align: center;
 }
 
 li > button:first-of-type {
@@ -107,6 +123,19 @@ li > button:first-of-type {
 div > li.list-group-item {
     display: flex;
     justify-content: flex-start;
+}
+
+.SAD {
+    width: 70%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+h3.text-center {
+    font-size: 3vw;
+    font-weight: bold;
+    color: black;
 }
 
 @media (max-width: 200px) {
@@ -149,6 +178,10 @@ div > li.list-group-item {
     #warningOut {
         font-size: 4px
     }
+    
+    h3.text-center {
+        font-size: 6vw;
+    }
 }
 
 @media (min-width: 800px) {
@@ -180,6 +213,10 @@ div > li.list-group-item {
 
     h3 {
         font-size: 32px
+    }
+
+    h3.text-center {
+        font-size: 24px;
     }
 
     #warningOut {

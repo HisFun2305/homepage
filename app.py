@@ -1,5 +1,6 @@
 import os
 import json
+import random
 
 from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
@@ -29,9 +30,37 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-@app.route("/")
+@app.route("/", methods = ["GET", "POST"])
 def index():
-    return render_template("index.html", active1 = "active")
+    if request.method == "POST":
+        conn = create_connection(DB_PATH)
+        db = conn.cursor()
+        dat = db.execute("SELECT * FROM sad")
+        txt = request.json
+        txt = ["".join(txt)]
+        try:
+            db.execute("INSERT INTO sad VALUES(?)", txt)
+            conn.commit()
+            conn.close()
+            return 1
+        except sqlite3.IntegrityError:
+            conn.close()
+            return "You've already said this! Still sounds good though :D"
+        except:
+            conn.close()
+            return "Something went wrong! Please try again later"
+        
+    else:
+        conn = create_connection(DB_PATH)
+        db = conn.cursor()
+        dat = db.execute("SELECT * FROM sad")
+        txt = []
+        for t in dat:
+            txt.append(t[0])
+        db.close()
+        return render_template("index.html", active1 = "active", SAD = txt[random.randrange(0, len(txt))])
+    
+
 
 @app.route("/to-do", methods = ["GET", "POST"])
 def todo():
@@ -48,8 +77,8 @@ def todo():
             db.execute("UPDATE todo SET flag = ? WHERE id = ?", data)
             conn.commit()
         elif data[1] == 2:
-            data = [2, data[0]["id"]]
-            db.execute("UPDATE todo SET flag = ? WHERE id = ?", data)
+            data = [2, data[0]["date"], data[0]["id"]]
+            db.execute("UPDATE todo SET flag = ?, date = ? WHERE id = ?", data)
             conn.commit()
         elif data[1] == 3:
             data = [0, data[0]["id"]]

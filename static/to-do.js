@@ -3,7 +3,7 @@ var focus = [];
 var done = [];
 const reEmpty = /\S/
 
-async function logJSONData() {
+async function logJSONDataTodo() {
     const response = await fetch("/to-do/data");
     const jsonData = await response.json();
     toDo = [];
@@ -21,10 +21,11 @@ async function logJSONData() {
             done.push(i)
         }
     }
-    updateLists()
+    clearDone();
+    updateLists();
 }
 
-async function postJSON(data, flag) {
+async function postJSONTodo(data, flag) {
     data = [data, flag]
     try {
         const response = await fetch("/to-do", {
@@ -39,7 +40,7 @@ async function postJSON(data, flag) {
         console.error(error);
     }
     if (flag == 0){
-        logJSONData();
+        logJSONDataTodo();
     }
 }
 
@@ -101,23 +102,36 @@ function updateLists() {
 }
 
 function returnItem(item) {
+    item.flag = 0;
     focus.splice(focus.indexOf(item), 1);
     toDo.unshift(item);
     updateLists();
-    postJSON(item, 3)
+    postJSONTodo(item, 3)
 }
 
 function moveItem(item) {
+    item.flag = 1;
     toDo.splice(toDo.indexOf(item), 1);
     focus.unshift(item);
-    postJSON(item, 1)
+    postJSONTodo(item, 1)
 }
 
 function completeItem(item) {
+    item.flag = 2;
+    const d = new Date();
+    item.date = d.getUTCDate();
     focus.splice(focus.indexOf(item), 1);
     done.unshift(item);
     updateLists();
-    postJSON(item, 2)
+    postJSONTodo(item, 2)
+}
+
+function clearDone(){
+    const d = new Date();
+    date = d.getUTCDate();
+    if (done.length && done[0].date != date){
+        postJSONTodo("", 4)
+    }
 }
 
 function addTask(event) {
@@ -125,7 +139,7 @@ function addTask(event) {
     let input = document.getElementById("taskInput");
     if (reEmpty.test(input.value)) {
         toDo.unshift(input.value)
-        postJSON(input.value, 0)
+        postJSONTodo(input.value, 0)
         input.value = "";
     } else {
         warning();
@@ -148,5 +162,5 @@ document.addEventListener("DOMContentLoaded", function(event) {
             addTask(event);
         }
     });
-    logJSONData();
+    logJSONDataTodo();
 });

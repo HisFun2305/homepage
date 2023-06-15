@@ -26,30 +26,42 @@
                 <div class="weather-content txt" id="precip-out-txt"></div>
             </div>
         </div>
-        <div class="flex-time" id="time-flex"></div>
-        <div class="flex-time" id="time-flex-alt"></div>
-        <div class="dropdown-selection"></div>
-
-        <div class="flex-child">
-            <h3 class="text-center">Choose tasks to focus on</h3>
-            <div id="toDoList" class="list-group">
+        <div class="flex-middle">
+            <div class="flex-time" id="time-flex"></div>
+            <div class="flex-time" id="time-flex-alt"></div>
+            <!-- System to Address Depression -->
+            <div class="SAD">
+                <input id="SADInput" class="SAD form-control me-2" type="search" placeholder="Say something nice to yourself" aria-label="SAD input"></input>
+                <button onclick="inputSAD()" class="btn btn-outline-success" type="submit">Submit</button>
             </div>
-            <div class="flex-inline-input">
-                <input id="taskInput" class="form-control me-2" type="search" placeholder="Add task" aria-label="task input"></input>
-                <button onclick="addTask(event)" class="btn btn-outline-primary" type="submit">Add Task</button>
-            </div>
-            <p id="warningOut"></p>
-            <h3>Focus tasks</h3>
-            <div id="focusList" class="list-group">
-            </div>
-            <h3>Done tasks</h3>
-            <div id="doneList" class="list-group">
-            </div>
+            <p id="SADWarningOut"></p>
+            <h3 class="form-text text-center" id="SADTxt">{{ SAD }}</h3>
         </div>
 
-        <div class="flex-child">
-            <h3>Plans</h3>
-            <div class="plans" id="plan-grid"></div>
+        
+        <div class="flex-body">
+
+            <div class="flex-child">
+                <div class="flex-inline-input">
+                    <input id="taskInput" class="form-control me-2" type="search" placeholder="Add task" aria-label="task input"></input>
+                    <button onclick="addTask(event)" class="btn btn-outline-primary" type="submit">Add Task</button>
+                </div>
+                <p id="warningOut"></p>
+                <h3>Choose tasks to focus on</h3>
+                <div id="toDoList" class="list-group">
+                </div>
+                <h3>Focus tasks</h3>
+                <div id="focusList" class="list-group">
+                </div>
+                <h3>Done tasks</h3>
+                <div id="doneList" class="list-group">
+                </div>
+            </div>
+
+            <div class="flex-child">
+                <h3>Plans</h3>
+                <div class="plans" id="plan-grid"></div>
+            </div>
         </div>
     </div>
 

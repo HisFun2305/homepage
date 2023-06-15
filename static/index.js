@@ -54,6 +54,30 @@ const Cols = {
     }
 }
 
+async function postJSONSAD(data) {
+    try {
+        const response = await fetch("/", {
+        method: "POST", // or 'PUT'
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+        });
+        const result = await response.text();
+        if (result != 1) {
+            w = document.getElementById("SADWarningOut");
+            console.log(result)
+            w.innerText = result
+            setTimeout(function() {
+                w.innerText = null;
+            }, 2000);
+        }
+
+    } catch (error) {
+        console.error(error);
+    }
+}
+
 function getDate(){
     let d = new Date();
     d = new Date(d.toLocaleString("en-US", {timeZone: "America/Indiana/Tell_City"}));
@@ -237,7 +261,19 @@ function killChildren(parent) {
     }
 }
 
+function inputSAD(){
+    input = document.getElementById("SADInput");
+    postJSONSAD(input.value)
+    input.value = ""
+}
+
 document.addEventListener("DOMContentLoaded", function(event) {
+    var input = document.getElementById("SADInput");
+    input.addEventListener("keypress", function(event) {
+        if (event.key === "Enter" && !event.shiftKey) {
+            inputSAD();
+        }
+    });
     updateLayout();
     updateTime();
     updatePrecip("precip", "precip-out", "precip-out-txt", 60);
