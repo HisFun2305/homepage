@@ -224,10 +224,17 @@ function addZero(i) {
 
 function makePlanGrid() {
     plot = document.getElementById("plan-grid");
+    killChildren(plot)
     itemList.forEach(function(d, i) {
         let tTip = makeToolTip(d, i);
         plot.appendChild(tTip);
     });
+}
+
+function killChildren(parent) {
+    while (parent.firstChild) {
+        parent.removeChild(parent.firstChild);
+    }
 }
 
 document.addEventListener("DOMContentLoaded", function(event) {

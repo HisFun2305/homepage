@@ -33,9 +33,46 @@ Session(app)
 def index():
     return render_template("index.html", active1 = "active")
 
-@app.route("/to-do")
+@app.route("/to-do", methods = ["GET", "POST"])
 def todo():
-    return render_template("to-do.html", active2 = "active")
+    if request.method == "POST":
+        data = request.json
+        conn = create_connection(DB_PATH)
+        db = conn.cursor()
+        if data[1] == 0:
+            data = [data[0], 0]
+            db.execute("INSERT INTO todo (txt, flag) VALUES(?, ?)", data)
+            conn.commit()
+        elif data[1] == 1:
+            data = [1, data[0]["id"]]
+            db.execute("UPDATE todo SET flag = ? WHERE id = ?", data)
+            conn.commit()
+        elif data[1] == 2:
+            data = [2, data[0]["id"]]
+            db.execute("UPDATE todo SET flag = ? WHERE id = ?", data)
+            conn.commit()
+        elif data[1] == 3:
+            data = [0, data[0]["id"]]
+            db.execute("UPDATE todo SET flag = ? WHERE id = ?", data)
+            conn.commit()
+        elif data[1] == 4:
+            db.execute("DELETE FROM todo WHERE flag = 2")
+            conn.commit()
+        conn.close()
+        return "success"
+    else:
+        return render_template("to-do.html", active2 = "active")
+
+@app.route("/to-do/data", methods = ["GET", "POST"])
+def todo_data():
+    connection = create_connection(DB_PATH)
+    db = connection.cursor()
+    db.row_factory = dict_factory
+    jsonList = []
+    for out in db.execute("SELECT * FROM todo"):
+        jsonList.append(out)
+    out = json.dumps(jsonList)
+    return out
 
 @app.route("/plans", methods = ["GET", "POST"])
 def plans():
@@ -57,12 +94,13 @@ def plans():
             data = [data[0]["id"]]
             db.execute("DELETE FROM plans WHERE id = ?", data)
             conn.commit()
+        conn.close()
         return
     else:
         return render_template("plans.html", active3 = "active", test_res = "yeet")
 
 @app.route("/plans/data")
-def data():
+def plans_data():
     connection = create_connection(DB_PATH)
     db = connection.cursor()
     db.row_factory = dict_factory

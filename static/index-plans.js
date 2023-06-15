@@ -1,11 +1,31 @@
-const itemList = [];
+var itemList = [];
 
 async function logJSONData() {
+    itemList = []
     const response = await fetch("/plans/data");
     const jsonData = await response.json();
     for (var i of jsonData) itemList.push(i);
     makePlanGrid();
 }
+
+async function postJSON(data, flag) {
+    data = [data, flag]
+    try {
+      const response = await fetch("/plans", {
+        method: "POST", // or 'PUT'
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+  
+    } catch (error) {
+      console.error(error);
+    }
+    if (flag == 0 || flag == 2){
+        logJSONData()
+    }
+  }
 
 function makeToolTip(d, i) {
     var tTip = document.createElement("div");
@@ -17,7 +37,6 @@ function makeToolTip(d, i) {
     var label2 = document.createElement("label2");
     var number2 = document.createElement("input");
     var edit = document.createElement("button");
-    var img = document.createElement("img");
     var del = document.createElement("div");
     var logShow = document.createElement("button");
     logShow.innerText = "Show log";
@@ -37,7 +56,7 @@ function makeToolTip(d, i) {
     del.addEventListener("click", function(event) {
         event.stopPropagation();
         itemList.splice(i, 1);
-        updatePlot();
+        postJSON(d, 2);
     })
     h5.innerText = d.txt;
     p1.appendChild(document.createTextNode(`Urgency: ${d.urg}`));
@@ -55,11 +74,13 @@ function makeToolTip(d, i) {
     number1.setAttribute("min", 0);
     number1.setAttribute("max", 100);
     number1.addEventListener("input", function(event) {
-        var dot = tTip.parentNode
         y = number1.valueAsNumber
         if (y <= 100 && y >= 0) {
             d.urg = y;
         }
+    });
+    number1.addEventListener("click", function(event){
+        event.stopPropagation();
     });
     number1.style = "display: none; opacity: 0;"
     label2.appendChild(document.createTextNode(`Importance:`));
@@ -72,11 +93,13 @@ function makeToolTip(d, i) {
     number2.setAttribute("min", 0);
     number2.setAttribute("max", 100);
     number2.addEventListener("input", function(event) {
-        var dot = tTip.parentNode
         y = number2.valueAsNumber
         if (y <= 100 && y >= 0) {
             d.impt = y;
         }
+    });
+    number2.addEventListener("click", function(event){
+        event.stopPropagation();
     });
     number2.style = "display: none; opacity: 0;"
     var logInput = document.createElement("input");
@@ -89,6 +112,9 @@ function makeToolTip(d, i) {
         if (event.key === "Enter" && !event.shiftKey) {
             addLog(d, tTip);
         }
+    });
+    logInput.addEventListener("click", function(event){
+        event.stopPropagation();
     });
     logInput.style = "display: none; opacity: 0;"
     var logSubmit = document.createElement("button");
@@ -107,7 +133,11 @@ function makeToolTip(d, i) {
         event.stopPropagation();
         editSwitch(edit, cancel, p1, p2, label1, label2, number1, number2, logInput, logSubmit, d);
     });
-    tTip.append(h5, p1, p2, label1, number1, label2, number2, del, logShow, edit, cancel, logInput, logSubmit);
+    tTip.append(h5, p1, p2, label1, number1, label2, number2, del, logShow, edit, cancel, logInput, logSubmit);    tTip.className = "tooltip-alt";
+    tTip.addEventListener("click", function(event){
+        event.stopPropagation();
+        focusSwitch(tTip, d);
+    });
     return tTip;
 }
 
@@ -157,6 +187,7 @@ function hideEdit(edit, cancel, p1, p2, label1, label2, number1, number2, logInp
     label2.style = "display: none; opacity: 0;"
     logInput.style = "display: none; opacity: 0;"
     logSubmit.style = "display: none; opacity: 0;"
+    postJSON(d, 1);
 }
 
 var logSwitch = (function() {
@@ -219,4 +250,5 @@ function addLog(d, tooltip) {
     hideLog(tooltip.querySelector("#logToggle"), tooltip);
     showLog(tooltip.querySelector("#logToggle"), tooltip, d);
     logSwitch(false);
+    postJSON(d, 1);
 }
