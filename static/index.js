@@ -112,8 +112,10 @@ function updateTime(){
 }
 
 function updateLayout(){
+    let hr = getDate()[2]
+    setLayout(hr);
     setInterval(function() {
-        let hr = getDate()[2]
+        hr = getDate()[2]
         if (prev !== hr){
             prev = hr;
             setLayout(hr);
@@ -238,7 +240,7 @@ function aftnLayout(){
 
 function niteLayout(){
     document.getElementById("header-text").innerHTML = "Good Night!"
-    //code
+    document.getElementById("flex-SAD").style = "display: flex;"
 }
 
 function addZero(i) {
