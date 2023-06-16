@@ -1,6 +1,7 @@
 const month = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 const weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 let prev = -1;
+let prevmin = -1;
 function Col(r, g, b) {
     this.r = r;
     this.g = g;
@@ -53,6 +54,7 @@ const Cols = {
         b: 255,
     }
 }
+const NOLA_COORD = [29.9511, -90.0715]
 
 async function postJSONSAD(data) {
     try {
@@ -186,23 +188,24 @@ function tempStat(temp) {
 
 function precipStat(precip) {
     if (precip < 10 && precip >= 0) {
-        return ["No Rain", 1];
+        return ["Dry", 1];
     }
     if (precip < 40 && precip >= 10) {
-        return ["Low Rain", 2];
+        return ["Low Humid", 2];
     }
     if (precip < 70 && precip >= 40) {
-        return ["Mid Rain", 3];
+        return ["Mid Humid", 3];
     }
     if (precip <= 100 && precip >= 70) {
-        return ["High Rain", 4];
+        return ["High Humid", 4];
     }
 }
 
-function updateTemp(loc, numLoc, txtLoc, temp) {
+function updateTemp(loc, numLoc, txtLoc, data) {
     let out = document.getElementById(loc);
     let outTxt = document.getElementById(txtLoc);
     let outNum = document.getElementById(numLoc);
+    let temp = Math.round(data.main.temp)
     let col = tempColMix(temp);
     let txt = tempStat(temp)[0];
     out.style.backgroundColor = `rgba(${col.r},${col.g},${col.b},1.0)`;
@@ -210,10 +213,12 @@ function updateTemp(loc, numLoc, txtLoc, temp) {
     outTxt.innerText = txt;
 }
 
-function updatePrecip(loc, numLoc, txtLoc, precip) {
+function updatePrecip(loc, numLoc, txtLoc, data) {
+    // humidity, not precipitaiton. Code was initially writted for precipitation, but API data does not include necccesary data
     let out = document.getElementById(loc);
     let outTxt = document.getElementById(txtLoc);
     let outNum = document.getElementById(numLoc);
+    let precip = data.main.humidity
     let col = precipColMix(precip);
     let txt = precipStat(precip)[0];
     out.style.backgroundColor = `rgba(${col.r},${col.g},${col.b},1.0)`;
@@ -226,6 +231,13 @@ function updatePrecip(loc, numLoc, txtLoc, precip) {
         outNum.style.color = "white";
         outTxt.style.color = "white";
     }
+}
+
+async function updateWeather(){
+    response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${NOLA_COORD[0]}&lon=${NOLA_COORD[1]}&appid=db6529b8eaef4e94ef738d98911cd8fb&units=metric`);
+    let nola = await response.json();
+    updatePrecip("precip", "precip-out", "precip-out-txt", nola);
+    updateTemp("temp", "temp-out", "temp-out-txt", nola);
 }
 
 function mornLayout(){
@@ -278,7 +290,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
     });
     updateLayout();
     updateTime();
-    updatePrecip("precip", "precip-out", "precip-out-txt", 60);
-    updateTemp("temp", "temp-out", "temp-out-txt", 25);
     logJSONData();
+    updateWeather();
+    setInterval(async function() {
+        if (min/10 != prevmin){
+            prevmin = min/10
+            updateWeather();
+        }
+    }, 60000);
 });

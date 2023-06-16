@@ -5,6 +5,31 @@ function Col(r, g, b) {
     this.g = g;
     this.b = b;
 }
+const API_KEY = "db6529b8eaef4e94ef738d98911cd8fb"
+const ICON_MAP = {
+    "01d": "clear-day",
+    "01n": "clear-night",
+    "02d": "clear-day",
+    "02n": "clear-night",
+    "03d": "partly-cloudy-day",
+    "03n": "partly-cloudy-night",
+    "04d": "overcast-day",
+    "04n": "overcast-night",
+    "09d": "overcast-day-rain",
+    "09n": "overcast-night-rain",
+    "10d": "partly-cloudy-day-rain",
+    "10n": "partly-cloudy-night-rain",
+    "11d": "thunderstorms-day",
+    "11n": "thunderstorms-night",
+    "13d": "snowflake",
+    "13n": "snowflake",
+    "50d": "fog-day",
+    "50n": "fog-night",
+}
+let prev = -1
+const SG_COORD = [1.3521, 103.8198]
+const NOLA_COORD = [29.9511, -90.0715]
+
 const Cols = {
     Freezing: {
         r: 51,
@@ -75,6 +100,7 @@ function tempColMix(temp) {
 }
 
 function precipColMix(precip) {
+    // humidity, not precipitaiton
     if (precip < 10 && precip >= 0) {
         return ColMix(Cols.LowPrecip, Cols.NoPrecip, precip / 10);
     }
@@ -116,23 +142,24 @@ function tempStat(temp) {
 
 function precipStat(precip) {
     if (precip < 10 && precip >= 0) {
-        return ["No Rain", 1];
+        return ["Dry", 1];
     }
     if (precip < 40 && precip >= 10) {
-        return ["Low Rain", 2];
+        return ["Low Humid", 2];
     }
     if (precip < 70 && precip >= 40) {
-        return ["Mid Rain", 3];
+        return ["Mid Humid", 3];
     }
     if (precip <= 100 && precip >= 70) {
-        return ["High Rain", 4];
+        return ["High Humid", 4];
     }
 }
 
-function updateTemp(loc, numLoc, txtLoc, temp) {
+function updateTemp(loc, numLoc, txtLoc, data) {
     let out = document.getElementById(loc);
     let outTxt = document.getElementById(txtLoc);
     let outNum = document.getElementById(numLoc);
+    let temp = Math.round(data.main.temp)
     let col = tempColMix(temp);
     let txt = tempStat(temp)[0];
     out.style.backgroundColor = `rgba(${col.r},${col.g},${col.b},1.0)`;
@@ -140,10 +167,12 @@ function updateTemp(loc, numLoc, txtLoc, temp) {
     outTxt.innerText = txt;
 }
 
-function updatePrecip(loc, numLoc, txtLoc, precip) {
+function updatePrecip(loc, numLoc, txtLoc, data) {
+    // humidity, not precipitaiton. Code was initially writted for precipitation, but API data does not include necccesary data
     let out = document.getElementById(loc);
     let outTxt = document.getElementById(txtLoc);
     let outNum = document.getElementById(numLoc);
+    let precip = data.main.humidity
     let col = precipColMix(precip);
     let txt = precipStat(precip)[0];
     out.style.backgroundColor = `rgba(${col.r},${col.g},${col.b},1.0)`;
@@ -158,13 +187,28 @@ function updatePrecip(loc, numLoc, txtLoc, precip) {
     }
 }
 
-function updateClim(imgLoc, txtLoc, clim){
+function updateClim(imgLoc, txtLoc, data){
     let outTxt = document.getElementById(txtLoc);
     let outImg = document.getElementById(imgLoc);
+    clim = data.weather[0].description
+    icon = data.weather[0].icon
     outTxt.innerText = clim;
     outTxt.style.color = "black";
-    clim = clim.replace(/\s+/g, '-').toLowerCase();
-    outImg.src = `static/assets/weather-icons/${clim}.svg`;
+    icon = ICON_MAP[icon]
+    outImg.src = `static/assets/weather-icons/${icon}.svg`;
+}
+
+async function updateWeather(){
+    let response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${SG_COORD[0]}&lon=${SG_COORD[1]}&appid=db6529b8eaef4e94ef738d98911cd8fb&units=metric`);
+    let sg = await response.json();
+    response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${NOLA_COORD[0]}&lon=${NOLA_COORD[1]}&appid=db6529b8eaef4e94ef738d98911cd8fb&units=metric`);
+    let nola = await response.json();
+    updatePrecip("precip-1", "precip-out-1", "precip-out-1txt", nola);
+    updatePrecip("precip-2", "precip-out-2", "precip-out-2txt", sg);
+    updateTemp("temp-1", "temp-out-1", "temp-out-1txt", nola);
+    updateTemp("temp-2", "temp-out-2", "temp-out-2txt", sg);
+    updateClim("clim-out-1", "clim-out-1txt", nola);
+    updateClim("clim-out-2", "clim-out-2txt", sg);
 }
 
 function updateTime(txtLoc, zone){
@@ -185,16 +229,6 @@ function getDate(zone){
     return `${d.getHours()%12}:${addZero(d.getMinutes())}:${addZero(d.getSeconds())} ${d.getHours()<12 ? "am" : "pm"}, ${d.getDate()}/${d.getMonth()}/${d.getFullYear()}, ${d.getDate()} ${month[d.getMonth()]}, ${weekday[d.getDay()]}`;
 }
 
-function getTemp(out, numLoc, txtLoc) {
-    // to be implemented later
-    updateTemp(out, numLoc, txtLoc, placeholder.value);
-}
-
-function getPrecip(out, numLoc, txtLoc) {
-    // to be implemented later
-    updatePrecip(out, numLoc, txtLoc, placeholder.value);
-}
-
 function addZero(i) {
     if (i < 10) {i = "0" + i}
     return i;
@@ -203,10 +237,13 @@ function addZero(i) {
 document.addEventListener("DOMContentLoaded", function(event) {
     updateTime("flex-time1", 1);
     updateTime("flex-time2", 2);
-    updatePrecip("precip-1", "precip-out-1", "precip-out-1txt", 25);
-    updatePrecip("precip-2", "precip-out-2", "precip-out-2txt", 60);
-    updateTemp("temp-1", "temp-out-1", "temp-out-1txt", 25);
-    updateTemp("temp-2", "temp-out-2", "temp-out-2txt", 18);
-    updateClim("clim-out-1", "clim-out-1txt", "Clear day");
-    updateClim("clim-out-2", "clim-out-2txt", "Thunderstorms rain");
+    updateWeather();
+    const d = new Date();
+    let min = d.getUTCMinutes();
+    setInterval(async function() {
+        if (min/10 != prev){
+            prev = min/10
+            updateWeather();
+        }
+    }, 60000);
 });
