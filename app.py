@@ -2,10 +2,7 @@ import os
 import json
 import random
 
-from flask import Flask, flash, redirect, render_template, request, session
-from flask_session import Session
-from tempfile import mkdtemp
-from werkzeug.security import check_password_hash, generate_password_hash
+from flask import Flask, flash, redirect, render_template, request
 
 import sqlite3
 from sqlite3 import Error
@@ -25,17 +22,12 @@ def create_connection(DB_PATH):
 # Configure application
 app = Flask(__name__)
 
-# Configure session to use filesystem (instead of signed cookies)
-app.config["SESSION_PERMANENT"] = False
-app.config["SESSION_TYPE"] = "filesystem"
-Session(app)
-
 @app.route("/", methods = ["GET", "POST"])
 def index():
     if request.method == "POST":
         conn = create_connection(DB_PATH)
         db = conn.cursor()
-        dat = db.execute("SELECT * FROM sad")
+        # dat = db.execute("SELECT * FROM sad")
         txt = request.json
         txt = ["".join(txt)]
         try:

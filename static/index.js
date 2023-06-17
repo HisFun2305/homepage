@@ -90,7 +90,7 @@ function getDate(){
             d.getHours()];
 }
 
-function setLayout(hr){
+function setLayout(hr){     
     let header = document.getElementById("greet-header");
     header.className = `flex-top g${hr}`;
     if(hr < 13){
