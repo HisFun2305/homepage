@@ -400,3 +400,5 @@ A helper function to add a zero in front of single-digit numbers
 
 ### document.addEventListener
 Begin updating time and weather for Singapore and New Orleans, make an API call every 10 minutes
+
+# This was Wish.com Jarvis
