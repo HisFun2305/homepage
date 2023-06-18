@@ -34,7 +34,7 @@ def index():
             db.execute("INSERT INTO sad VALUES(?)", txt)
             conn.commit()
             conn.close()
-            return 1
+            return sqlite3.HTTP_202_ACCEPTED
         except sqlite3.IntegrityError:
             conn.close()
             return "You've already said this! Still sounds good though :D"
