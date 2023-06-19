@@ -118,8 +118,8 @@ function moveItem(item) {
 
 function completeItem(item) {
     item.flag = 2;
-    const d = new Date();
-    item.date = d.getUTCDate();
+    d = new Date(d.toLocaleString("en-US", {timeZone: "America/Indiana/Tell_City"}));
+    item.date = d.getDate();
     focus.splice(focus.indexOf(item), 1);
     done.unshift(item);
     updateLists();
