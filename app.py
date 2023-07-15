@@ -80,7 +80,7 @@ def todo():
             db.execute("DELETE FROM todo WHERE flag = 2")
             conn.commit()
         conn.close()
-        return "success"
+        return sqlite3.HTTP_200_OK
     else:
         return render_template("to-do.html", active2 = "active")
 
@@ -116,7 +116,7 @@ def plans():
             db.execute("DELETE FROM plans WHERE id = ?", data)
             conn.commit()
         conn.close()
-        return
+        return sqlite3.HTTP_200_OK
     else:
         return render_template("plans.html", active3 = "active", test_res = "yeet")
 
