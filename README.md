@@ -1,17 +1,16 @@
 # Wish.com Jarvis
-#### Video Demo:  (https://youtu.be/Si-vZV9jcS4) (Note: to comply with the 3 minute limit the video is sped up by 1.9 times. Feel free to reduce the speed if neccesary)
 #### Description: A personal task manager
 #### Hosted on: https://hbfan2305.pythonanywhere.com/
 
 ## [app.py](app.py)
-A python flask application used as the backend of the project. imports sqlite3, a SQL database manager that has all neccessary functionality for my use case. Initialses the flask application with `app = Flask(__name__)`
+A python flask application was used as the backend of the project. imports sqlite3, a SQL database manager that has all the necessary functionality for my use case. Initializes the flask application with `app = Flask(__name__)`
 
 ### create_connection
 A function that connects to a sqlite database, gracefully handles exceptions
 
 ### index
 Homepage of website, implements the SAD(System to Alleviate Depression). 
-- On `GET`(`else:`), data from the 'sad' table is obtained and processed into a python list. A random item in the array is selected, and passed into the jinja placeholder `SAD` in `index.html`, and an `active` class is passed into the `active1` placeholer, to highlight the active tab in the navigation bar
+- On `GET`(`else:`), data from the 'sad' table is obtained and processed into a python list. A random item in the array is selected, and passed into the jinja placeholder `SAD` in `index.html`, and an `active` class is passed into the `active1` placeholder, to highlight the active tab in the navigation bar
 - On `POST`, the json input is parsed into a string(`"".join(txt)`) and placed into a list so that it plays nice with `db.execute()`. The code tries to input the POSTed text into the 'sad' table, and takes advantage of the `UNIQUE` condition of the only column in the table to prevent duplicates in the table by catching the `sqlite3.IntegrityError` exception, and returns a human-friendly response to the client that performed the POST.
 
 ### todo
@@ -32,7 +31,7 @@ Each row of of `db.execute("SELECT * FROM todo")` parsed into a dictionary, with
 Implements the "future-plans" tab.
 - On `GET`, the `plans.html` template is rendered with the third navigation link set to `active`
 - On `POST`, the code also checks for an included flag on the second item in the POSTed json array, and manipulates the dictionary in the first item of the array
-    - A `0` flag indicates inserting a new plan item. The log in the POSTed dictionay is parsed from a list into a string, with a "|" delimiter. The text(`data[0]["txt"]`), urgency(`data[0]["urg"]`), importance(`data[0]["impt"]`), and the stringified log(`data[0]["log"]`) is placed in a list and inserted into the "todo" table
+    - A `0` flag indicates inserting a new plan item. The log in the POSTed dictionary is parsed from a list into a string, with a "|" delimiter. The text(`data[0]["txt"]`), urgency(`data[0]["urg"]`), importance(`data[0]["impt"]`), and the stringified log(`data[0]["log"]`) is placed in a list and inserted into the "todo" table
     - A `1` flag indicates updating a plan item. Again the log is parsed into a string, and text, urgency, importance and log updated. The correct plan is selected with the included id.
     - A `2` flag indicates a delete operation. The correct plan is found with the id, and the plan item deleted.
 
@@ -40,10 +39,10 @@ Implements the "future-plans" tab.
 Implements the bulk retrieval of plans data. As with todo_data, each row of `db.execute("SELECT * FROM plans")` is parsed into a dictionary, but before adding the dictionary to the output list, the log is parsed from a string into a list by splitting at the "|" delimiter. The output list is then returned to the client
 
 ### tnw
-Implements the 'Time and Weather' tab. Nothing spectacular, just rendering `tnw.html` and setting the fourth naviation link to active
+Implements the 'Time and Weather' tab. Nothing spectacular, just rendering `tnw.html` and setting the fourth navigation link to active
 
 ### dict_factory
-Implements parsing an sqlite row tuple into a dictionary. Iterates through `cursor.description` to get each column name, and for each item in `row` the corresponding column name is paired with it using `zip(fields, row)`, and added to a dicitonary (Credit: https://docs.python.org/3/library/sqlite3.html#how-to-create-and-use-row-factories)
+Implements parsing an sqlite row tuple into a dictionary. Iterates through `cursor.description` to get each column name, and for each item in `row` the corresponding column name is paired with it using `zip(fields, row)`, and added to a dictionary (Credit: https://docs.python.org/3/library/sqlite3.html#how-to-create-and-use-row-factories)
 
 ## [data.sqlite](data.sqlite)
 Implements the backend SQL database for Wish.com Jarvis.
@@ -52,7 +51,7 @@ Implements the backend SQL database for Wish.com Jarvis.
 Table that stores the text of a task item under the column "txt" and the status of a task in the column "flag". A simpler implementation than a table each for unfocused, focused and completed tasks as shifting between each status is as simple as updating a value in a single column
 
 ### plans
-Table that stores plan items. The name for each plan is stored under "txt", the urgency of the plan is stored under "urg", the importance of the plan is stored under "impt" and the plan's log is stored under "log". The log is stored as text, delimited by "|", as text is a well-suppourted sqlite datatype and parsing between a string and a list is relatively trivial in python, using `join()` and `split()`
+Table that stores plan items. The name for each plan is stored under "txt", the urgency of the plan is stored under "urg", the importance of the plan is stored under "impt" and the plan's log is stored under "log". The log is stored as text, delimited by "|", as text is a well-supported sqlite datatype and parsing between a string and a list is relatively trivial in python, using `join()` and `split()`
 
 ### sad
 Table that stores encouraging statements in a single column as part of the SAD(System to Alleviate Depression)
@@ -63,7 +62,7 @@ Implements the following:
 - In `body`: 
     - Responsive navigation bar, with vertical bars (`class="vert"`) delimiting tabs when fully expanded. The active tab is underlined, and activated by passing `active` into one of the four jinja placeholders(`active1`-`4`)
     - When the viewport width decreases beyond the bootstrap `sm` breakpoint, the navigation bar becomes a dropdown with a button to reveal the dropdown. Some text (`Navigation menu:`) indicates the purpose of the dropdown button
-    - A 'responsive buffer' which displaces the content of the website from the top of the page as if the navigation bar was there; prevents content from dissappearing behind the fixed navigation bar
+    - A 'responsive buffer' which displaces the content of the website from the top of the page as if the navigation bar was there; prevents content from disappearing behind the fixed navigation bar
     - jinja placeholders to add additional content
 
 ## [templates/index.html](templates/index.html)
@@ -73,7 +72,7 @@ Implements the following:
     - [index.css](static/index.css) providing css for most other elements in index
     - [time-colors.css](static/time-colors.css) which provides gradient backgrounds for greeting header, credit to [Peter Bork](https://codepen.io/bork/pen/WNrmWr)
     - [to-do.js](static/to-do.js) which provides functionality to the "to-do" side of index
-    - [index-plans.js](static/index-plans.js) which provides funcitonality to the "plans" side of index
+    - [index-plans.js](static/index-plans.js) which provides functionality to the "plans" side of index
     - [index.js](static/index.js) provides functionality for the remaining components of index
 - In `body` (from top to bottom, left to right):
     - a "widget" for temperature in New Orleans, LA, a greeting header with a background header that changes as the day progressess, and a "widget" for humidity in New Orleans, all in a horizontal header
@@ -95,7 +94,7 @@ Implements the following:
     - list-group`s for focus tasks, unfocused tasks, and completed tasks and their associated headers
 
 ## [templates/plans.html](templates/plans.html)
-- In `head`: links to [plans.css](static/plans.css) and [plans.js](static/plans.js) to provide styling and fucntionality
+- In `head`: links to [plans.css](static/plans.css) and [plans.js](static/plans.js) to provide styling and functionality
 - In 'body':
     - A text input for the names of new plans
     - Two sliders for urgency and importance, with their associated labels and a `p` tag to indicate the value of the slider position
@@ -104,7 +103,7 @@ Implements the following:
     - A scatterplot graph background, with dots representing an individual plan. The information in each plan can be viewed by clicking on the dot
 
 ## [templates/tnw.html](templates/tnw.html)
-- In `head`: links to [tnw.css](static/tnw.css) and [plans.js](static/tnw.js) to provide styling and fucntionality
+- In `head`: links to [tnw.css](static/tnw.css) and [plans.js](static/tnw.js) to provide styling and functionality
 - In `body`: A header for `New Orleans, LA, USA` on the left, along with a date/time readout for New Orleans below the header and widgets for temperature, humidity and climate. The right side is similar, but for Singapore
 
 ## [static/index.js](static/index.js)
@@ -121,7 +120,7 @@ Implements the following:
 Constructor that represents a color with r, g, and b values
 
 ### postJSONSAD
-posts an encouraging statement inputted by the user, and displays the error if the server respons with an error
+posts an encouraging statement inputted by the user, and displays the error if the server responds with an error
 
 ### getDate
 returns a list, the first two being a HTML-formatted date/time string and the second the current hour in New Orleans' timezone
@@ -130,31 +129,31 @@ returns a list, the first two being a HTML-formatted date/time string and the se
 sets the background of the greeting header based on the current hour and selects the correct layout of the homepage based on the current hour
 
 ### updateTime
-calls [getDate](#getdate) for the date/time string(`time`) and a multiline date/time string for slimmer viewports(`altTime`) every 50 miliseconds
+calls [getDate](#getdate) for the date/time string(`time`) and a multiline date/time string for slimmer viewports(`altTime`) every 50 milliseconds
 
 ### updateLayout
 gets the current hour using [getDate](#getdate) and checks if the hour has advanced every 2 seconds by checking against the global `prev` variable. If the hour has advanced, set `prev` to the current hour and call [setLayout](#setlayout) to set the appropriate homepage layout
 
 ### tempColMix
-gets a colour based on the a weighted average of r,g and b values of two different temperature colours, with the weights being the temperature's proximity to various treshold values. Calls [ColMix](#colmix) to "mix" the colors
+gets a colour based on a weighted average of r,g and b values of two different temperature colors, with the weights being the temperature's proximity to various threshold values. Calls [ColMix](#colmix) to "mix" the colors
 
 ### precipColMix
-similar to [tempColMix](#tempcolmix), but for rpecipitaiton values and colours
+similar to [tempColMix](#tempcolmix), but for precipitation values and colours
 
 ### ColMix
-generates a new colour absed on hoe much of the first colour should be in the resultant color
+generates a new color based on how much of the first color should be in the resultant color
 
 ### tempStat
 returns a brief description of an input temperature
 
 ### precipStat
-returns a breif description of an input humidity
+returns a brief description of an input humidity
 
 ### updateTemp
-Sets the color, temperature and description of the temperature widget
+Sets the color, temperature, and description of the temperature widget
 
 ### updatePrecip
-Sets the color, temperature and description of the humidity widget. Changes the colour of text to improve contrast for different background colors
+Sets the color, temperature, and description of the humidity widget. Changes the color of text to improve contrast for different background colors
 
 ### updateWeather
 gets weather data from [Open Weather Map](https://api.openweathermap.org), and calls [updateTemp](#updatetemp) and [updatePrecip](#updateprecip)
@@ -178,7 +177,7 @@ Clears all plans displayed in the plans section of index, and creates a new tool
 a helper function to clear all child elements of a parent element
 
 ### inputSAD
-POSTs the ecnouraging sentence inputted by the user, and clears the input field
+POSTs the encouraging sentence inputted by the user, and clears the input field
 
 ### docuemnt.addEventListener
 initalises input fields, sets the layout of index and begins updating weather widgets every minute
@@ -186,13 +185,13 @@ initalises input fields, sets the layout of index and begins updating weather wi
 ## [static/index-plans.js](static/index-plans.js)
 
 ### global variables
-- itemList: A list that stores dictionaries that represents plan items
+- itemList: A list that stores dictionaries that represent plan items
 
 ### logJSONData
 calls `fetch("/plans/data")` and loads the requested data in the JSON array into itemList, then calling [makePlanGrid](#makeplangrid) in [index.js](#staticindexjs) to display the plan items
 
 ### postJSON
-calls `fetch` with `method: "POST"` to POST a dictionary representing a plan along with the neccesary operation indicated by the [flag](#plans), then calling [logJSONData](#logjsondata) if the flag is `0` or `2`, indicating a new insertion and a deletion, respectively
+calls `fetch` with `method: "POST"` to POST a dictionary representing a plan along with the necessary operation indicated by the [flag](#plans), then calling [logJSONData](#logjsondata) if the flag is `0` or `2`, indicating a new insertion and a deletion, respectively
 
 ### makeToolTip
 
@@ -235,20 +234,20 @@ refer to [addLog](#addlog-1) in [plans.js](#staticplansjs)
 - reEmpty: a regular expression for whitespace
 
 ### logJSONDataTodo
-Fetches the lastest tasks from the server and slots each task into the correct list (`todo`, `focus`, or `done`) based on their flag, where
+Fetches the latest tasks from the server and slots each task into the correct list (`todo`, `focus`, or `done`) based on their flag, where
 - `0` represents an unfocused task
 - `1` represents a focused task
 - `2` represents a completed task.
-Calls [clearDone](#cleardone) to clear the completed task list if neccesary, and updates the task lists with [updateLists](#updatelists)
+Calls [clearDone](#cleardone) to clear the completed task list if necessary, and updates the task lists with [updateLists](#updatelists)
 
 ### postJSONTodo
 POSTs a list containing a dictionary representing a task that includes the task's id, its text the task's flag, and another [flag](#todo) that indicates an operation to be carried out. If the flag was an insertion (`0`), then the task data is updated with [logJSONTodo](#logjsondatatodo)
 
 ### makeForm
-Generates the unfocused task list, and initialises each item to move to the focused list when it is clicked if the task belongs to the unfocused list
+Generates the unfocused task list, and initializes each item to move to the focused list when it is clicked if the task belongs to the unfocused list
 
 ### makeFormFocus
-Generates the focused task list, while adding a button which will move the task to the completed  list when clicked(`btn1`) by calling [returnItem](#returnitem) and another button which will return the task to the unfocused list(`btn2`)
+Generates the focused task list, while adding a button that will move the task to the completed  list when clicked(`btn1`) by calling [returnItem](#returnitem) and another button which will return the task to the unfocused list(`btn2`)
 
 ### killChildren
 Clears child elements of any parent element
@@ -272,12 +271,12 @@ Gets the value of the task text input field(`input`), checks if the valuse is em
 issues a warning for an empty input which clears after 3 seconds
 
 ### docuemnt.addEventListener
-initialses the task input field and gets task data from the server with [logJSONDataTodo](#logjsondatatodo)
+initializes the task input field and gets task data from the server with [logJSONDataTodo](#logjsondatatodo)
 
 ## [static/plans.js](static/plans.js)
 
 ### global variables
-- itemList: A list that stores dictionaries that represents plan items
+- itemList: A list that stores dictionaries that represent plan items
 - reEmpty: A regular expression for whitespace
 - data: A wild debug variable :D pls ignore thx
 
@@ -285,10 +284,10 @@ initialses the task input field and gets task data from the server with [logJSON
 creates a new Item object representing a plan item
 
 ### logJSONData
-calls `fetch("/plans/data")` and loads the requested data in the JSON array into itemList, then calls [makScatter](#makescatter) to generate a scatterplot based on urgancy and importance
+calls `fetch("/plans/data")` and loads the requested data in the JSON array into itemList, then calls [makScatter](#makescatter) to generate a scatterplot based on urgency and importance
 
 ### postJSON
-calls `fetch` with `method: "POST"` to POST a dictionary representing a plan along with the neccesary operation indicated by the [flag](#plans), updating the scatterplot with [makScatter](#makescatter) only when the flag is 0 or 2, indicating a insertion and deletion respectively
+calls `fetch` with `method: "POST"` to POST a dictionary representing a plan along with the necessary operation indicated by the [flag](#plans), updating the scatterplot with [makScatter](#makescatter) only when the flag is 0 or 2, indicating an insertion and deletion respectively
 
 ### initSlider
 Initialises sliders to output the value of the slider on every input
@@ -315,10 +314,10 @@ importance and urgency, which updates both the stored values or urgency and impo
 A function to alternate between calling [showEdit](#showedit) and [hideEdit](#hideedit)
 
 ### showEdit
-Updates button text to "Save", stores initial values in variables, initialises the "cancel" button with those initial values, replaces text with input fields by changing the `display` property
+Updates button text to "Save", stores initial values in variables, initializes the "cancel" button with those initial values, replaces text with input fields by changing the `display` property
 
 ### hideEdit
-Updates button text to "Edit", hides input fields and displays plaintext fields by chainging the "display" proprty, while updating values displayed in plaintext
+Updates button text to "Edit", hides input fields, and displays plaintext fields by changing the "display" property, while updating values displayed in plaintext
 
 ### logSwitch
 A function to alternate between calling [showEdit](#showlog) and [hideEdit](#hidelog)
@@ -327,7 +326,7 @@ A function to alternate between calling [showEdit](#showlog) and [hideEdit](#hid
 Updates button text to "Show Log", iterates through each item in `d.log` (the log for a plan item) and adds each item as a `li` into the tooltip
 
 ### hideLog
-Gets all `li` elements in the tooltip, and while there are still `li` elements, remove the frist `li` element
+Gets all `li` elements in the tooltip, and while there are still `li` elements, remove the first `li` element
 
 ### addLog
 Adds a log item to the log list of a dictionary representing a plan item, refreshes the displayed loglist by calling [hidelog](#hidelog-1) and [showLog](#showlog-1), updates [logSwitch](#logswitch-1) to account for the displayed log list, and POSTs the updated plan item with [postJSON](#postjson-1), with a `1` flag to indicate an update operation
@@ -345,7 +344,7 @@ clears all children of the scatterplot element which does not have an id of `img
 issues a warning to input content
 
 ### document.addEventListener
-initialises input fields and gets the lastest list of plan items
+initialises input fields and gets the latest list of plan items
 
 ## [static/tnw.js](static/tnw.js)
 
@@ -387,18 +386,18 @@ refer to [updatePrecip](#updateprecip) in [index.js](#staticindexjs)
 Sets the icon and text of the climate widget based on the icon code in the weather API data and the description given in the same API data
 
 ### updateWeather
-calls [updatePrecip](#updateprecip), [updateTemp](#updatetemp) and [updateClim](#updateclim) for Singapore(`sg`) and New Orleans(`nola`) weatehr data
+calls [updatePrecip](#updateprecip), [updateTemp](#updatetemp) and [updateClim](#updateclim) for Singapore(`sg`) and New Orleans(`nola`) weather data
 
 ### updateTime
-Calls [getDate](#getdate-1) for a date/time string every 50 miliseconds
+Calls [getDate](#getdate-1) for a date/time string every 50 milliseconds
 
 ### getDate
-Gets the time in Singapore and New Orleans based on the zone inputted (`1` or `2`), bu setting the timsezone of the `Date` object with `toLocaleString`
+Gets the time in Singapore and New Orleans based on the zone inputted (`1` or `2`), bu setting the timezone of the `Date` object with `toLocaleString`
 
 ### addZero
 A helper function to add a zero in front of single-digit numbers
 
 ### document.addEventListener
-Begin updating time and weather for Singapore and New Orleans, make an API call every 10 minutes
+Begin updating time and weather for Singapore and New Orleans, and make an API call every 10 minutes
 
 # This was Wish.com Jarvis
