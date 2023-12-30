@@ -1,6 +1,7 @@
 # Wish.com Jarvis
 #### Description: A personal task manager
 #### Hosted on: https://hbfan2305.pythonanywhere.com/
+#### Github: https://github.com/HisFun2305/homepage.git
 
 ## [app.py](app.py)
 A python flask application was used as the backend of the project. imports sqlite3, a SQL database manager that has all the necessary functionality for my use case. Initializes the flask application with `app = Flask(__name__)`
