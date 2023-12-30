@@ -10,7 +10,7 @@ A python flask application was used as the backend of the project. imports sqlit
 A function that connects to a sqlite database, gracefully handles exceptions
 
 ### index
-Homepage of website, implements the SAD(System to Alleviate Depression). 
+Homepage of website, implements the SAD(System to Alleviate Dreariness). 
 - On `GET`(`else:`), data from the 'sad' table is obtained and processed into a python list. A random item in the array is selected, and passed into the jinja placeholder `SAD` in `index.html`, and an `active` class is passed into the `active1` placeholder, to highlight the active tab in the navigation bar
 - On `POST`, the json input is parsed into a string(`"".join(txt)`) and placed into a list so that it plays nice with `db.execute()`. The code tries to input the POSTed text into the 'sad' table, and takes advantage of the `UNIQUE` condition of the only column in the table to prevent duplicates in the table by catching the `sqlite3.IntegrityError` exception, and returns a human-friendly response to the client that performed the POST.
 
@@ -55,7 +55,7 @@ Table that stores the text of a task item under the column "txt" and the status 
 Table that stores plan items. The name for each plan is stored under "txt", the urgency of the plan is stored under "urg", the importance of the plan is stored under "impt" and the plan's log is stored under "log". The log is stored as text, delimited by "|", as text is a well-supported sqlite datatype and parsing between a string and a list is relatively trivial in python, using `join()` and `split()`
 
 ### sad
-Table that stores encouraging statements in a single column as part of the SAD(System to Alleviate Depression)
+Table that stores encouraging statements in a single column as part of the SAD(System to Alleviate Dreariness)
 
 ## [templates/layout.html](templates/layout.html)
 Implements the following:
