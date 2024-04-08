@@ -8,9 +8,7 @@ import sqlite3
 from sqlite3 import Error
 
 DB_PATH = os.getcwd() + "\data.sqlite"
-
-API_KEY = os.environ["API_KEY"]
-print(API_KEY)
+DB_PROM = os.getcwd() + "\prom.sqlite"
 
 def create_connection(DB_PATH):
     connection = None
@@ -139,6 +137,27 @@ def plans_data():
 def tnw():
     return render_template("tnw.html", active4 = "active")
 
+@app.route("/prom", methods = ["GET", "POST"])
+def prom():
+    if request.method == "POST":
+        connection = None
+        try:
+            connection = sqlite3.connect(DB_PROM)
+            print("Connection to SQLite DB successful")
+            db = connection.cursor()
+            if db.fetchone() is None:
+                db.execute("CREATE TABLE yes(ans TEXT)")
+        except Error as e:
+            print(f"The error '{e}' occurred")
+        data = [request.json]
+        print(request.json)
+        db.execute("""INSERT INTO yes VALUES(?)""", data)
+        connection.commit()
+        connection.close()
+        return "HTTP_200_OK"
+    else:
+        return render_template("prom.html")
+        
 def dict_factory(cursor, row):
     fields = [column[0] for column in cursor.description]
     return {key: value for key, value in zip(fields, row)}

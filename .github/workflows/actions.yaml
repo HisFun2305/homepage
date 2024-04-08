@@ -1,4 +1,4 @@
 name: Get Weather API Key
 
-env: # Or as an environment variable
-  API_KEY: ${{ secrets.API_KEY }}
+env: 
+  API_KEY: "yeehaw"

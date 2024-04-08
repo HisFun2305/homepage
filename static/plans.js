@@ -33,7 +33,6 @@ async function postJSON(data, flag) {
     }
   }
   
-const data = { yeet: "bananene" };
 
 function initSlider(loc, out) {
     let range = document.getElementById(loc)
