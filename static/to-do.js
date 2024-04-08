@@ -118,6 +118,7 @@ function moveItem(item) {
 
 function completeItem(item) {
     item.flag = 2;
+    let d = new Date()
     d = new Date(d.toLocaleString("en-US", {timeZone: "America/Indiana/Tell_City"}));
     item.date = d.getDate();
     focus.splice(focus.indexOf(item), 1);
