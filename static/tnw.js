@@ -5,7 +5,7 @@ function Col(r, g, b) {
     this.g = g;
     this.b = b;
 }
-const API_KEY = //your own API key
+const API_KEY = "db6529b8eaef4e94ef738d98911cd8fb"
 const ICON_MAP = {
     "01d": "clear-day",
     "01n": "clear-night",
