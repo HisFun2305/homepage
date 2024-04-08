@@ -8,7 +8,7 @@ import sqlite3
 from sqlite3 import Error
 
 DB_PATH = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__))) + "/data.sqlite"
-DB_PROM = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__))) + "./prom.sqlite"
+DB_PROM = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__))) + "/prom.sqlite"
 
 def create_connection(DB_PATH):
     connection = None
