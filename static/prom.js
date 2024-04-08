@@ -3,10 +3,12 @@ document.addEventListener("DOMContentLoaded", function(event){
     ye.addEventListener("click", function(event){
         event.preventDefault();
         postJSON("ye")
+        location.href='/partyyy'
     }); 
     nah = document.getElementById("nah")
     let yeoffsets = ye.getBoundingClientRect();
-    nah.style.top = (yeoffsets.bottom + 50) + "px"
+    nah.style.top = (yeoffsets.bottom + 60) + "px"
+    nah.style.left = yeoffsets.left + "px"
     nah.addEventListener("mousemove", function(event){
         event.stopPropagation();
         let offsets = nah.getBoundingClientRect();
@@ -59,8 +61,10 @@ async function postJSON(data) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
+        
       });
-  
+      return response
+
     } catch (error) {
       console.error(error);
     }

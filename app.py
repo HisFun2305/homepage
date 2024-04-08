@@ -2,7 +2,7 @@ import os
 import json
 import random
 
-from flask import Flask, flash, redirect, render_template, request, session
+from flask import Flask, flash, redirect, url_for, render_template, request, session
 
 import sqlite3
 from sqlite3 import Error
@@ -152,9 +152,14 @@ def prom():
         db.execute("""INSERT INTO yes VALUES(?)""", data)
         connection.commit()
         connection.close()
-        return "HTTP_200_OK"
+        return redirect(url_for('partyyy'))
     else:
         return render_template("prom.html")
+
+
+@app.route("/partyyy")
+def partyyy():
+        return render_template("partyyy.html")
         
 def dict_factory(cursor, row):
     fields = [column[0] for column in cursor.description]
