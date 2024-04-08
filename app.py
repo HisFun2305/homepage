@@ -7,7 +7,8 @@ from flask import Flask, flash, redirect, render_template, request, session
 import sqlite3
 from sqlite3 import Error
 
-DB_PATH = "/home/hbfan2305/homepage/data.sqlite"
+DB_PATH = os.getcwd() + "/data.sqlite"
+DB_PROM = os.getcwd() + "/prom.sqlite"
 
 def create_connection(DB_PATH):
     connection = None
