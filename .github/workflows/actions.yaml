@@ -1,4 +1,4 @@
 steps:
-  - name: Get Weather APIR Key
+  - name: Get Weather API Key
     env: # Or as an environment variable
       API_KEY: ${{ secrets.API_KEY }}
