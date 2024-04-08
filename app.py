@@ -3,12 +3,14 @@ import json
 import random
 
 from flask import Flask, flash, redirect, render_template, request, session
-from flask_api import status
 
 import sqlite3
 from sqlite3 import Error
 
 DB_PATH = "/home/hbfan2305/homepage/data.sqlite"
+
+API_KEY = os.environ["API_KEY"]
+print(API_KEY)
 
 def create_connection(DB_PATH):
     connection = None
@@ -28,7 +30,7 @@ def index():
     if request.method == "POST":
         conn = create_connection(DB_PATH)
         db = conn.cursor()
-        dat = db.execute("SELECT * FROM sad")
+        # dat = db.execute("SELECT * FROM sad")
         txt = request.json
         txt = ["".join(txt)]
         try:
