@@ -9,7 +9,7 @@ from sqlite3 import Error
 
 DB_PATH = os.getcwd() + "\data.sqlite"
 
-API_KEY = os.getenv("API_KEY")
+API_KEY = os.environ["API_KEY"]
 print(API_KEY)
 
 def create_connection(DB_PATH):
