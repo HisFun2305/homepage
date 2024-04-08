@@ -2,12 +2,12 @@ import os
 import json
 import random
 
-from flask import Flask, flash, redirect, render_template, request
+from flask import Flask, flash, redirect, render_template, request, session
 
 import sqlite3
 from sqlite3 import Error
 
-DB_PATH = os.getcwd() + "\data.sqlite"
+DB_PATH = "/home/hbfan2305/homepage/data.sqlite"
 
 API_KEY = os.environ["API_KEY"]
 print(API_KEY)
@@ -37,15 +37,13 @@ def index():
             db.execute("INSERT INTO sad VALUES(?)", txt)
             conn.commit()
             conn.close()
-            return sqlite3.HTTP_202_ACCEPTED
+            return "200_OK"
         except sqlite3.IntegrityError:
             conn.close()
             return "You've already said this! Still sounds good though :D"
-        except:
-            conn.close()
-            return "Something went wrong! Please try again later"
-        
+
     else:
+        print(DB_PATH)
         conn = create_connection(DB_PATH)
         db = conn.cursor()
         dat = db.execute("SELECT * FROM sad")
@@ -54,7 +52,7 @@ def index():
             txt.append(t[0])
         db.close()
         return render_template("index.html", active1 = "active", SAD = txt[random.randrange(0, len(txt))])
-    
+
 
 
 @app.route("/to-do", methods = ["GET", "POST"])
@@ -83,7 +81,7 @@ def todo():
             db.execute("DELETE FROM todo WHERE flag = 2")
             conn.commit()
         conn.close()
-        return sqlite3.HTTP_200_OK
+        return "200_OK"
     else:
         return render_template("to-do.html", active2 = "active")
 
@@ -119,7 +117,7 @@ def plans():
             db.execute("DELETE FROM plans WHERE id = ?", data)
             conn.commit()
         conn.close()
-        return sqlite3.HTTP_200_OK
+        return "200_OK"
     else:
         return render_template("plans.html", active3 = "active", test_res = "yeet")
 
@@ -148,7 +146,7 @@ def dict_factory(cursor, row):
 #     ("test2",83, 75, "c|d"),
 #     ("3tset",79, 80, "z|y"),
 #     ("test4", 23, 45, "y|c")
-# ] 
+# ]
 # db.executemany("INSERT INTO plans (txt, urg, impt, log) VALUES(?, ?, ?, ?)", data)
 
 # CREATE TABLE plans (id INTEGER PRIMARY KEY AUTOINCREMENT, txt TEXT NOT NULL, urg INT NOT NULL, impt INT NOT NULL, log TEXT NOT NULL)

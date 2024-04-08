@@ -292,6 +292,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
     updateTime();
     logJSONData();
     updateWeather();
+    let d = new Date()
+    let min = d.getUTCMinutes()
     setInterval(async function() {
         if (min/10 != prevmin){
             prevmin = min/10
